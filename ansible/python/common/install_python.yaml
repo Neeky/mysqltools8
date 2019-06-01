@@ -1,0 +1,14 @@
+---
+  - name: "transfer install script to target host(s)"
+    copy:
+      src: "../../../sps/python/{{python_version}}"
+      dest: "/tmp/"
+
+  - name: "install {{python_version}}"
+    shell: "bash /tmp/{{python_version}}/auto_install.sh"
+
+  - name: "remove temp files"
+    file: 
+      path: "/tmp/{{python_version}}"
+      state: absent
+...

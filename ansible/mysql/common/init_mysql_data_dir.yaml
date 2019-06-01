@@ -1,0 +1,15 @@
+---
+  - name: "transfer users.sql to target host(s)."
+    template:
+      src: "../templates/users.sql.jinja"
+      dest: "/tmp/users.sql"
+
+  - name: "transfer init_mysql_data_dir.sh to target host(s)."
+    template:
+      src: "../templates/init_mysql_data_dir.sh.jinja"
+      dest: /tmp/init_mysql_data_dir.sh
+  
+  - name: "init data dir"
+    shell: bash /tmp/init_mysql_data_dir.sh
+
+...

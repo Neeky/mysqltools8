@@ -1,0 +1,45 @@
+---
+  - name: "stop httpd"
+    systemd:
+      name: httpd
+      state: stopped
+
+  - name: "transfer {{php_version}} to target host(s)"
+    copy:
+      src: "../../../sps/php/{{php_version}}"
+      dest: /tmp/
+      directory_mode: yes
+  
+  - name: "transfer install script to target host(s)"
+    template:
+      src: "../../../sps/php/{{php_version}}/auto_install.sh"
+      dest: "/tmp/{{php_version}}"
+  
+  - name: "install {{php_version}}"
+    shell: "bash /tmp/{{php_version}}/auto_install.sh"
+  
+  - name: "config {{php_version}}"
+    template:
+      src: "../templates/php.ini.jinja"
+      dest: "/usr/local/{{php_version}}/etc/php.ini"
+
+  - name: "config httpd"
+    template:
+      src: "../templates/httpd.conf.jinja"
+      dest: "/usr/local/httpd/conf/httpd.conf"
+
+  - name: "remove index.html"
+    file:
+      path: "/usr/local/httpd/htdocs/index.html"
+      state: absent
+  
+  - name: "transfer index.php to target host(s)"
+    copy:
+      src: "../templates/index.php"
+      dest: "/usr/local/httpd/htdocs/"
+
+  - name: "start httpd"
+    systemd:
+      name: httpd
+      state: started
+...

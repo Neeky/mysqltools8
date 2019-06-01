@@ -1,0 +1,13 @@
+*.pyc
+*.retry
+*.DS_Store
+*.temp
+.vscode
+sps/mysql/*
+sps/zabbix/*
+sps/mha/*
+sps/router/*
+sps/dble/*
+sps/httpd/*
+sps/php/*
+sps/python/*

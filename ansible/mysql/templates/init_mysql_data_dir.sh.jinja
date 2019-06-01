@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd {{mysql_base_dir}}
+
+if [ -d {{mysql_data_dir }}/mysql ]
+then
+    echo "`date`  | datadir has been inited" >> /tmp/mtls8.log
+    exit 1;
+else
+    mkdir -p {{mysql_data_dir}}
+    ./bin/mysqld --defaults-file=/etc/my-{{mysql_port}}.cnf --user=mysql --initialize-insecure --init-file=/tmp/users.sql
+fi

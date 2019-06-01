@@ -1,0 +1,36 @@
+---
+  - name: "create backup dir"
+    file:
+      path: "{{mysql_backup_dir}}"
+      state: directory
+      owner: "{{mysql_user}}"
+      group: "{{mysql_group}}"
+
+  - name: "create backup script dir"
+    file:
+      path: "{{mysql_backup_script_dir}}"
+      state: directory
+      owner: "{{mysql_user}}"
+      group: "{{mysql_group}}"
+
+  - name: "transfer backup script to target host (mysqldump)"
+    when: " mysql_backup_tool == 'mysqldump' "
+    template:
+      src: "../templates/mysqldump_backup.sh.jinja"
+      dest: "{{mysql_backup_script_dir}}/{{mysql_port}}-mysqldump-backup.sh"
+      mode: 0755
+      owner: "{{mysql_user}}"
+      group: "{{mysql_group}}"
+
+  - name: "config backup job (mysqldump)"
+    when: " mysql_backup_tool == 'mysqldump' "
+    cron:
+      backup: yes
+      day: "{{mysql_backup_crontab_day}}"
+      hour: "{{mysql_backup_crontab_hour}}"
+      minute: "{{mysql_backup_crontab_minute}}"
+      name: "mysql-{{mysql_port}}-auto-backup"
+      state: present
+      user: "{{mysql_user}}"
+      job: "{{mysql_backup_script_dir}}/{{mysql_port}}-mysqldump-backup.sh"
+...

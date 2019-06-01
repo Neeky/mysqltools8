@@ -1,0 +1,8 @@
+---
+  - name: /etc/profile
+    lineinfile:
+      path: /etc/profile
+      line: "export PATH=/usr/local/python/bin/:$PATH"
+      insertafter: EOF
+      state: present
+...

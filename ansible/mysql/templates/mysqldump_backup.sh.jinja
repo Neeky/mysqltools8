@@ -1,0 +1,8 @@
+#!/bin/bash
+
+{{mysql_base_dir}}/bin/mysqldump \
+   --user={{mysql_dumper_user}} --password={{mysql_dumper_pwd}} --host=127.0.0.1 --port=3306 \
+   --all-databases --events --routines --triggers --default-character-set=binary \
+   --flush-logs --flush-privileges --master-data=2 --max-allowed-packet=128M \
+   --set-gtid-purged=OFF --single-transaction > {{mysql_backup_dir}}/3306-"$(date +%F_T_%H_%M_%S)".sql
+

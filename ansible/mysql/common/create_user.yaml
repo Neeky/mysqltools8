@@ -1,0 +1,14 @@
+---
+ - name: create mysql group
+   group:
+     name: "{{mysql_group}}"
+     state: present
+     gid: "{{mysql_gid}}"
+    
+ - name: create user "{{mysql_user}}"
+   user:
+     name: "{{mysql_user}}"
+     state: present
+     uid: "{{mysql_uid}}"
+     group: mysql
+...

@@ -1,0 +1,18 @@
+---
+  - hosts: sqlstudio
+    remote_user: root
+    become_user: root
+    become: yes
+    vars_files:
+      - ../../config.yaml
+      - ./vars/python.yaml
+    tasks:
+      - name: install dependencies
+        import_tasks: common/install_denpendences.yaml
+      
+      - name: install python
+        import_tasks: common/install_python.yaml
+
+      - name: export path
+        import_tasks: common/export_path.yaml 
+...

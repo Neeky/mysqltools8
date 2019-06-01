@@ -1,0 +1,35 @@
+---
+  - hosts: sqlstudio
+    remote_user: root
+    become_user: root
+    become: yes
+    vars_files:
+      - ../../config.yaml
+      - ./vars/mysql.yaml
+    tasks:
+      - name: create mysql user
+        import_tasks: common/create_user.yaml
+      
+      - name: install dependencies
+        import_tasks: common/mysql_dependencies.yaml
+      
+      - name: "create /etc/my-{{mysql_port}}.cnf"
+        import_tasks: common/create_my_cnf.yaml
+
+      - name: "install {{mysql_binary_pkg}}"
+        import_tasks: common/install_mysql.yaml
+
+      - name: "init data dir"
+        import_tasks: common/init_mysql_data_dir.yaml
+
+      - name: "config path"
+        import_tasks: common/export_path.yaml
+
+      - name: "config systemd and start mysqld"
+        import_tasks: common/conifg_systemd.yaml
+
+      - name: "config backup"
+        import_tasks: common/config_backup.yaml
+...
+
+   

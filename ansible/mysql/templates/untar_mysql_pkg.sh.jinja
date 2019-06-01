@@ -1,0 +1,10 @@
+#!/bin/bash
+cd /tmp/
+
+if [ -d {{mysql_base_dir}} ]
+then
+    echo 'mysql bas been installed'
+else
+    tar -xvf /tmp/{{mysql_binary_pkg}} -C /usr/local/
+    mkdir -p {{mysql_base_dir}}/.mtls8/
+fi

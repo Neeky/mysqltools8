@@ -1,0 +1,40 @@
+---
+  - name: "create zabbix user"
+    user:
+      name: "zabbix"
+
+  - name: "transfer {{zabbix_version}} to target host(s)."
+    copy:
+      src: "../../../sps/zabbix/{{zabbix_version}}"
+      dest: /tmp/
+  
+  - name: "transfer auto_install_agent.sh to target host(s)."
+    copy:
+      src: "../../../sps/zabbix/{{zabbix_version}}/auto_install_agent.sh"
+      dest: "/tmp/{{zabbix_version}}/auto_install_agent.sh"
+  
+  - name: "install zabbix agent"
+    shell: "bash /tmp/{{zabbix_version}}/auto_install_agent.sh"
+
+  - name: "change owner /usr/local/{{zabbix_version}}"
+    file:
+      path: "/usr/local/{{zabbix_version}}"
+      owner: zabbix
+      group: zabbix
+      recurse: yes
+  
+  - name: "config zabbix-agent.conf"
+    template:
+      src: "../templates/zabbix_agentd.conf"
+      dest: "/usr/local/{{zabbix_version}}/etc/"
+
+  - name: "config monitor item"
+    template:
+      src: "../templates/mtls.conf"
+      dest: "/usr/local/{{zabbix_version}}/etc/zabbix_agentd.conf.d/"
+
+  - name: "remove temp files"
+    file:
+      path: "/tmp/{{zabbix_version}}"
+      state: absent
+...

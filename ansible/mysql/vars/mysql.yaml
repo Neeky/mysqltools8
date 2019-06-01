@@ -1,0 +1,26 @@
+#mysql configure
+mysql_user: "mysql{{mysql_port}}"
+mysql_group: mysql
+mysql_uid: "{{mysql_port}}"
+mysql_gid: 3306
+mysql_backup_tool: "mysqldump"
+mysql_backup_crontab_day: "*"
+mysql_backup_crontab_hour: "2"
+mysql_backup_crontab_minute: "0"
+mysql_base_dir: "/usr/local/{{ mysql_binary_pkg | replace('.tar.gz','') | replace('.tar.xz','') }}"
+mysql_data_dir: "/database/mysql/data/{{mysql_port}}"
+mysql_version: "{{ mysql_binary_pkg | replace('.tar.gz','') | replace('.tar.xz','') }}"
+mysql_backup_dir: "/backup/mysql/{{mysql_port}}"
+mysql_backup_script_dir: "/usr/local/.mtlsscripts"
+mysql_root_pwd: 'mtls0352'
+mysql_monitor_user: 'monitor'
+mysql_monitor_pwd: 'monitor0352'
+mysql_dumper_user: 'dumper'
+mysql_dumper_pwd: 'dumper0352'
+mysql_extra_user: 'extrabackuper'
+mysql_extra_pwd: 'extra0352'
+mysql_binlog_format: "row"
+mysql_xport: "{{ mysql_port * 10 }}"
+mysql_mgrport: "{{ mysql_port * 10 + 1 }}"
+mysql_admin_port: "{{ mysql_port * 10 + 2 }}"
+

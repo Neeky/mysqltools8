@@ -1,0 +1,52 @@
+---
+  - name: "transfer {{mysql_binary_pkg}} to target host(s)."
+    copy:
+      src: "../../../sps/mysql/{{mysql_binary_pkg}}"
+      dest: "/tmp/"
+      owner: "{{mysql_user}}"
+  
+  - name: "generate untar script /tmp/untar_mysql_pkg.sh"
+    template:
+      src: "../templates/untar_mysql_pkg.sh.jinja"
+      dest: "/tmp/untar_mysql_pkg.sh"
+  
+  - name: "untar {{mysql_binary_pkg}} "
+    shell: "bash /tmp/untar_mysql_pkg.sh > /tmp/untar_mysql_pkg.log"
+  
+  - name: "rm /tmp/untar_mysql_pkg.sh"
+    file:
+      path: "/tmp/untar_mysql_pkg.sh"
+      state: absent
+
+  - name: "create libmysqlclient_r.so"
+    file:
+      src: "{{mysql_base_dir}}/lib/libmysqlclient.so"
+      dest: "{{mysql_base_dir}}/lib/libmysqlclient_r.so"
+      state: link
+  
+  - name: "update file privileges"
+    file:
+      path: "{{mysql_base_dir}}"
+      owner: "{{mysql_user}}"
+      group: "{{mysql_group}}"
+      recurse: yes
+  
+  - name: "config ldconfig"
+    template:
+      src: "../templates/ld.so.conf.jinja"
+      dest: "/etc/ld.so.conf.d/{{mysql_version}}.conf"
+  
+  - name: "load so"
+    shell: ldconfig
+  
+  - name: "conifg header file"
+    file:
+      src: "{{mysql_base_dir}}/include"
+      dest: "/usr/include/{{mysql_version}}"
+      state: link
+
+  - name: "rm /tmp/{{mysql_binary_pkg}}"
+    file:
+      path: "/tmp/{{mysql_binary_pkg}}"
+      state: absent
+...

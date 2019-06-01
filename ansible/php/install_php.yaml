@@ -1,0 +1,17 @@
+  - hosts: "zabbixstudio"
+    remote_user: root
+    become_user: root
+    become: yes
+    vars_files:
+      - ../../config.yaml
+      - ../../ansible/mysql/vars/mysql.yaml
+      - vars/php.yaml 
+
+    tasks:
+      - name: install dependences
+        import_tasks: common/install_dependences.yaml
+
+      - name: "install httpd {{php_version}}"
+        import_tasks: common/install_php.yaml
+...
+ 

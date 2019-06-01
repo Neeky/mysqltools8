@@ -1,0 +1,75 @@
+---
+  - name: "create zabbix user"
+    user:
+      name: "zabbix"
+
+  - name: "transfer {{zabbix_version}} to target host(s)."
+    copy:
+      src: "../../../sps/zabbix/{{zabbix_version}}"
+      dest: /tmp/
+  
+  - name: "transfer auto_install_server.sh to target host(s)."
+    template:
+      src: "../../../sps/zabbix/{{zabbix_version}}/auto_install_server.sh.jinja"
+      dest: "/tmp/{{zabbix_version}}/auto_install_server.sh"
+
+  - name: "stop httpd"
+    systemd:
+      name: "httpd"
+      state: stopped
+
+  - name: "remove /usr/local/httpd/htdocs/actionconf.php "
+    file:
+      path: "/usr/local/httpd/htdocs/actionconf.php"
+      state: absent
+  
+  - name: "install zabbix server"
+    shell: "bash /tmp/{{zabbix_version}}/auto_install_server.sh"
+
+  - name: "change owner /usr/local/{{zabbix_version}}"
+    file:
+      path: "/usr/local/{{zabbix_version}}"
+      owner: zabbix
+      group: zabbix
+      recurse: yes
+
+  - name: "transfer init_zabbix_database.sql to target host(s)"
+    template:
+      src: "../templates/init_zabbix_database.sql.jinja"
+      dest: "/tmp/{{zabbix_version}}/init_zabbix_database.sql"
+
+  - name: "init zabbix database"
+    shell: "{{mysql_base_dir}}/bin/mysql -uroot -p{{mysql_root_pwd}} -h127.0.0.1 -P{{mysql_port}} < /tmp/{{zabbix_version}}/init_zabbix_database.sql"
+  
+  - name: "config zabbix-server.conf"
+    template:
+      src: "../templates/zabbix_server.conf"
+      dest: "/usr/local/{{zabbix_version}}/etc/"
+  
+  - name: "config zabbix-agentd.conf"
+    template:
+      src: "../templates/zabbix_agentd.conf"
+      dest: "/usr/local/{{zabbix_version}}/etc/"
+
+  - name: "config monitor item"
+    template:
+      src: "../templates/mtls.conf"
+      dest: "/usr/local/{{zabbix_version}}/etc/zabbix_agentd.conf.d/"
+
+  - name: change owner /usr/local/httpd/htdocs/
+    file:
+      path: /usr/local/httpd/htdocs
+      owner: daemon
+      group: daemon
+      recurse: yes
+
+  - name: "start httpd"
+    systemd:
+      name: "httpd"
+      state: started
+
+  - name: "remove temp files"
+    file:
+      path: "/tmp/{{zabbix_version}}"
+      state: absent
+...

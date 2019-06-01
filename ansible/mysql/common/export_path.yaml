@@ -1,0 +1,22 @@
+---
+  - name: /etc/profile
+    lineinfile:
+      path: /etc/profile
+      line: "export PATH={{mysql_base_dir}}/bin/:$PATH"
+      insertafter: EOF
+      state: present
+  
+  - name: ~/.bash_profile
+    lineinfile:
+      path: "/home/{{mysql_user}}/.bash_profile"
+      line: "export PATH={{mysql_base_dir}}/bin/:$PATH"
+      insertafter: EOF
+      state: present   
+
+  - name: ~/.bashrc
+    lineinfile:
+      path: "/home/{{mysql_user}}/.bashrc"
+      line: "export PATH={{mysql_base_dir}}/bin/:$PATH"
+      insertafter: EOF
+      state: present  
+...

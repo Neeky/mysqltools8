@@ -1,0 +1,22 @@
+---
+  - hosts: zabbixstudio
+    remote_user: root
+    become_user: root
+    become: yes
+    vars_files:
+      - ../../config.yaml
+      - ../../ansible/mysql/vars/mysql.yaml
+      - vars/zabbix.yaml
+    tasks:
+      - name: install dependences
+        import_tasks: common/install_dependences.yaml
+
+      - name: install zabbix_agent
+        import_tasks: common/install_zabbix_agent.yaml
+
+      - name: export path
+        import_tasks: common/export_path.yaml
+
+      - name: config zabbix_agent_systemd
+        import_tasks: common/config_zabbix_agent_systemd.yaml
+...

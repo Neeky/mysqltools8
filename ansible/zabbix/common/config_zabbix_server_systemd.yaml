@@ -1,0 +1,18 @@
+---
+  - name: config zabbix-server systemd
+    template:
+      src: ../templates/zabbix-server.service
+      dest: /usr/lib/systemd/system/zabbix-server.service
+
+  - name: start zabbix-server 
+    systemd:
+      name: zabbix-server
+      state: started
+      daemon_reload: yes
+
+  - name: config zabbix-server start up on boot
+    systemd:
+      name: zabbix-server
+      enabled: yes
+      daemon_reload: yes
+...

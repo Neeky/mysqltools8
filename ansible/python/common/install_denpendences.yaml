@@ -1,0 +1,71 @@
+---
+  - name: install gcc
+    yum:
+      name: gcc
+      state: present
+
+  - name: install gcc-c++
+    yum:
+      name: gcc-c++
+      state: present
+
+  - name: install libffi
+    yum:
+      name: libffi
+      state: present
+
+  - name: install libyaml-devel
+    yum:
+      name: libyaml-devel
+      state: present
+
+  - name: install libffi-devel
+    yum:
+      name: libffi-devel
+      state: present
+
+  - name: install zlib
+    yum:
+      name: zlib
+      state: present
+
+  - name: install zlib-devel
+    yum:
+      name: zlib-devel
+      state: present
+
+  - name: install openssl
+    yum:
+      name: openssl
+      state: present
+
+  - name: install openssl-devel
+    yum:
+      name: openssl-devel
+      state: present
+
+  - name: install libyaml 
+    yum:
+      name: libyaml 
+      state: present
+
+  - name: install sqlite-devel
+    yum:
+      name: sqlite-devel
+      state: present
+
+  - name: install libxml2
+    yum:
+      name: libxml2
+      state: present
+
+  - name: install libxslt-devel
+    yum:
+      name: libxslt-devel
+      state: present
+
+  - name: install libxml2-devel
+    yum:
+      name: libxml2-devel
+      state: present
+...

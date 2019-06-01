@@ -1,0 +1,16 @@
+  - hosts: "zabbixstudio"
+    remote_user: root
+    become_user: root
+    become: yes
+    vars_files:
+      - ../../config.yaml
+      - vars/httpd.yaml 
+
+    tasks:
+      - name: install dependences
+        import_tasks: common/install_dependences.yaml
+
+      - name: "install httpd {{httpd_version}}"
+        import_tasks: common/install_httpd.yaml
+...
+ 

@@ -1,0 +1,19 @@
+---
+  - name: "config mysqld-{{mysql_port}}.service"
+    template:
+      src: "../templates/mysqld.service.jinja"
+      dest: "/usr/lib/systemd/system/mysqld-{{mysql_port}}.service"
+  
+  - name: "conifg mysqld-{{mysql_port}} auto start"
+    systemd:
+      name: "mysqld-{{mysql_port}}"
+      enabled: yes
+      daemon_reload: yes
+  
+  - name: "start mysqld-{{mysql_port}}"
+    systemd:
+      name: "mysqld-{{mysql_port}}"
+      state: started
+      daemon_reload: yes
+
+...

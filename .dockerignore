@@ -1,0 +1,12 @@
+*.pyc
+*.retry
+*.DS_Store
+ansible/mysql/*.yaml.temp
+.vscode
+sps/mysql/*
+sps/zabbix/*
+sps/mha/*
+sps/router/*
+sps/dble/*
+sps/httpd/*
+sps/php/*

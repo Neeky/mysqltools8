@@ -1,0 +1,26 @@
+---
+  - name: "transfer {{ httpd_version}} to target host"
+    copy:
+      src: "../../../sps/httpd/{{httpd_version}}"
+      dest: /tmp/
+      directory_mode: yes
+
+  - name: "install {{httpd_version}} "
+    shell: "bash /tmp/{{httpd_version}}/auto_install.sh >> /tmp/mtls8.log"
+
+  - name: "config systemd"
+    template:
+      src: "../templates/httpd.service.jinja"
+      dest: "/usr/lib/systemd/system/httpd.service"
+
+  - name: "make httpd auto start on boot"
+    systemd:
+      name: httpd
+      enabled: yes
+      daemon_reload: yes
+  
+  - name: "start httpd"
+    systemd:
+      name: httpd
+      state: started
+...

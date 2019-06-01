@@ -1,0 +1,19 @@
+---
+  - name: "/etc/my-{{mysql_port}}.cnf for mysql-8.0.x "
+    when: mysql_binary_pkg.find('8.0') != -1
+    template:
+      src: ../templates/8.0/my.cnf.jinja
+      dest: "/etc/my-{{mysql_port}}.cnf"
+      owner: "{{mysql_user}}"
+      group: "{{mysql_group}}"
+      backup: yes
+
+  - name: "/etc/my-{{mysql_port}}.cnf for mysql-5.7.x "
+    when: mysql_binary_pkg.find('5.7') != -1
+    template:
+      src: ../templates/5.7/my.cnf.jinja
+      dest: "/etc/my-{{mysql_port}}.cnf"
+      owner: "{{mysql_user}}"
+      group: "{{mysql_group}}"
+      backup: yes
+...
