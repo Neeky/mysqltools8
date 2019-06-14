@@ -59,6 +59,7 @@ then
 else
     echo 'export PATH=/usr/local/python/bin/:$PATH' >> /etc/profile
 fi
+source /etc/profile
 
 set -eo pipefail
 # install ansible
