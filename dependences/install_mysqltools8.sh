@@ -7,6 +7,14 @@ PYTHON_VERSION=3.7.3
 ANSIBLE_VERSION=2.7.10
 WORK_DIR=/tmp/mt8/
 
+dependences_dir=$(dirname $0);
+if [ ${dependences_dir} == '.' ]
+then
+    dependences_dir=$(pwd)
+else
+    dependences_dir="$(pwd)/${dependences_dir}/"
+fi
+
 # checking python
 if [ -d /usr/local/python-${PYTHON_VERSION} ]
 then
