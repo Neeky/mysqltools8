@@ -12,7 +12,6 @@
 - [mysqltools的世界观](#mysqltools的世界观)
 - [mysqltool介绍](#mysqltool介绍)
 - [安装与配置mysqltools](#安装与配置mysqltools)
-- [配置管理结点](#配置管理结点)
 - [安装MySQL单机](#安装MySQL单机)
   - [mysqltools都做了什么](#mysqltools都做了什么)
   - [进一步定制mysqltools的行为](#进一步定制mysqltools的行为)
