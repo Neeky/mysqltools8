@@ -17,6 +17,8 @@
   - [进一步定制mysqltools的行为](#进一步定制mysqltools的行为)
 - [单机多实例](#单机多实例)
 - [数据库监控](#数据库监控)
+
+- [python安装](#python安装)
 --- 
 
 
@@ -715,6 +717,149 @@
 
    **监控系统在此选择的是 zabbix 、监控项采集&解决方案没有开源的工具可用了，所以直接自己写，mysqltools-python 这个软件包就是这一使命下的产物。也就是说我们需要在所以的被监控主机上都安装上 python-3.6.x 这个 python 环境，并安装上 mysqltools-python 这个包，好消息是这一切 mysqltools 都已经为你准备好了。**
 
-   **zabbix 是一套 c/s 架构的软件，agent 要安装到所有被监控的主机上，agent 负责收集监控项并执行 server 下发的解决方案**
+   **zabbix 是一套 c/s 架构的软件，agent 要安装到所有被监控的主机上，agent 负责收集监控项并执行 server 下发的解决方案，为了方便使用 zabbix 还提供了一套基于 php 实现的 web 页面**
+
+   **为了简单 mysqltools 会把整个 zabbix-后台数据库，zabbix-服务端，web-服务器 都安装到同一台主机上，逻辑上叫这台主机为 zabbix-server 。**
+
+   ---
+
+   
+## python安装
+   **因为 mysqltools 中大量的内容依赖于 python ,当我们管理的主机一多，那我们就需要在大量的主机上安装 python ，人肉操作是我们坚决反对的东西，所以 mysqltools 也就自带了 python 自动化安装的能力。**
+
+   **为了减小 mysqltools 包的大小，我们把一些不必要的功能做成了插件，自动化安装 python 这个功能对应的插件为 <a href="https://github.com/Neeky/mysqltools-plugin-python">mysqltools-plugin-python</a> 。安装插件的方法也非常简单，只要把插件下载下来保存到对应的目录就行了，python 插件的目录就 `sps/python`**
+
+   **1、** 安装 python 插件
+   ```bash
+   # 下载
+   cd /tmp/
+   wget https://github.com/Neeky/mysqltools-plugin-python/archive/master.zip
+
+   # 解压
+   unzip master.zip
+
+   # 把插件文件移动到 /usr/local/mysqltools8/sps/python/ 目录下
+   cd mysqltools-plugin-python-master/
+   mv python-3.7.3 /usr/local/mysqltools8/sps/python/
+
+   # python 插件目标的内容如下
+   tree /usr/local/mysqltools8/sps/python/         
+   /usr/local/mysqltools8/sps/python/
+   └── python-3.7.3
+       ├── auto_install.sh
+       ├── certifi-2019.3.9-py2.py3-none-any.whl
+       ├── chardet-3.0.4-py2.py3-none-any.whl
+       ├── idna-2.8-py2.py3-none-any.whl
+       ├── Jinja2-2.10.1-py2.py3-none-any.whl
+       ├── MarkupSafe-1.1.1-cp37-cp37m-manylinux1_x86_64.whl
+       ├── mysql_connector_python-8.0.16-cp37-cp37m-manylinux1_x86_64.whl
+       ├── mysqltools-python-2.19.04.10.tar.gz
+       ├── protobuf-3.7.1-cp37-cp37m-manylinux1_x86_64.whl
+       ├── psutil-5.6.2.tar.gz
+       ├── Python-3.7.3.tar.xz
+       ├── requests-2.22.0-py2.py3-none-any.whl
+       ├── setuptools-41.0.1-py2.py3-none-any.whl
+       ├── six-1.12.0-py2.py3-none-any.whl
+       └── urllib3-1.25.3-py2.py3-none-any.whl
+   ```
+   **2、** 修改 install_python.yaml 文件的 hosts 属性为目标主机(组)
+   ```bash
+   cd /usr/local/mysqltools8/ansible/python/install_python.yaml
+
+   cat install_python.yaml 
+   ---
+     - hosts: sqlstudio
+       remote_user: root
+       become_user: root
+       become: yes
+       vars_files:
+         - ../../config.yaml
+         - ./vars/python.yaml
+   ```
+   **3、** 自动化安装
+   ```bash
+   ansible-playbook install_python.yaml 
+   
+   PLAY [sqlstudio] ***************************************************************
+   
+   TASK [Gathering Facts] *********************************************************
+   ok: [sqlstudio]
+   
+   TASK [install gcc] *************************************************************
+   ok: [sqlstudio]
+   
+   TASK [install gcc-c++] *********************************************************
+   ok: [sqlstudio]
+   
+   TASK [install libffi] **********************************************************
+   ok: [sqlstudio]
+   
+   TASK [install libyaml-devel] ***************************************************
+   ok: [sqlstudio]
+   
+   TASK [install libffi-devel] ****************************************************
+   ok: [sqlstudio]
+   
+   TASK [install zlib] ************************************************************
+   ok: [sqlstudio]
+   
+   TASK [install zlib-devel] ******************************************************
+   ok: [sqlstudio]
+   
+   TASK [install openssl] *********************************************************
+   ok: [sqlstudio]
+   
+   TASK [install openssl-devel] ***************************************************
+   ok: [sqlstudio]
+   
+   TASK [install libyaml] *********************************************************
+   ok: [sqlstudio]
+   
+   TASK [install sqlite-devel] ****************************************************
+   ok: [sqlstudio]
+   
+   TASK [install libxml2] *********************************************************
+   ok: [sqlstudio]
+   
+   TASK [install libxslt-devel] ***************************************************
+   ok: [sqlstudio]
+   
+   TASK [install libxml2-devel] ***************************************************
+   ok: [sqlstudio]
+   
+   TASK [transfer install script to target host(s)] *******************************
+   changed: [sqlstudio]
+   
+   TASK [install python-3.7.3] ****************************************************
+   changed: [sqlstudio]
+   
+   TASK [remove temp files] *******************************************************
+   changed: [sqlstudio]
+   
+   TASK [/etc/profile] ************************************************************
+   ok: [sqlstudio]
+   
+   PLAY RECAP *********************************************************************
+   sqlstudio                  : ok=19   changed=3    unreachable=0    failed=0 
+   ```
+   **4、** 验证是否安装成功
+   ```bash
+   /usr/local/python/bin/python3                                            
+   Python 3.7.3 (default, Jul 24 2019, 10:53:38) 
+   [GCC 4.8.5 20150623 (Red Hat 4.8.5-36)] on linux
+   Type "help", "copyright", "credits" or "license" for more information.
+   >>> import mtls
+   ```
+   >如果没有报什么异常就说明是成功了
+
+   **5、** mysqltools 自动化安装 python 的时候会做一些什么
+   - 1、编译安装插件包中指定的 python 环境
+   - 2、自动安装 mysqltools-python 、requests 、psutil mysql-connector-python 等其它工具包
+   - 3、自动导出环境变量
+
+   ---
+
+
+
 
 
