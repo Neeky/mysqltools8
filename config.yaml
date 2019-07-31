@@ -1,6 +1,6 @@
 max_memory_size_mb: "{{ 1024 * 512 }}" # 512G内存
 mysql_port: 3306
-#mysql_binary_pkg: "mysql-5.7.27-linux-glibc2.12-x86_64.tar.gz"
-mysql_binary_pkg: "mysql-8.0.17-linux-glibc2.12-x86_64.tar.xz"
+mysql_binary_pkg: "mysql-5.7.27-linux-glibc2.12-x86_64.tar.gz"
+#mysql_binary_pkg: "mysql-8.0.17-linux-glibc2.12-x86_64.tar.xz"
 
 

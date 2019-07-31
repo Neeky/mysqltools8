@@ -19,6 +19,7 @@
 - [数据库监控](#数据库监控)
 
 - [python安装](#python安装)
+- [httpd安装](#httpd安装)
 --- 
 
 
@@ -858,6 +859,106 @@
    - 3、自动导出环境变量
 
    ---
+
+## httpd安装
+   **这里的 httpd 自动化安装流程是专门为 zabbix-server 做的，也就是说你最好不要用于其它的地方。httpd插件开源在了 <a target="_blank" href="https://github.com/Neeky/mysqltools-plugin-httpd">mysqltools-plugin-httpd</a>**
+
+   **1、** httpd 也是通过一个插件来实现的、所以你还是要先把插件下载到 sps/httpd/ 目标下
+   ```bash
+   cd /tmp/
+
+   wget https://github.com/Neeky/mysqltools-plugin-httpd/archive/master.zip
+
+   unzip master.zip
+
+   cd mysqltools-plugin-httpd-master/
+
+   mv httpd-2.4.39 /usr/local/mysqltools/sps/httpd/
+
+   tree /usr/local/mysqltools/sps/httpd/
+   ./
+   ├── README.md
+   └── httpd-2.4.39
+       ├── apr-1.7.0.tar.gz
+       ├── apr-util-1.6.1.tar.gz
+       ├── auto_install.sh
+       └── httpd-2.4.39.tar.gz
+   ```
+
+   **2、** 修改 hosts 为要安装 httpd 的主机
+   ```bash
+   cat install_httpd.yaml 
+     - hosts: "zabbixstudio"
+       remote_user: root
+       become_user: root
+       become: yes
+       vars_files:
+         - ../../config.yaml
+         - vars/httpd.yaml 
+   ```
+   **3、** 安装
+   ```bash
+   ansible-playbook install_httpd.yaml 
+    
+   PLAY [zabbixstudio] ************************************************************
+   
+   TASK [Gathering Facts] *********************************************************
+   ok: [zabbixstudio]
+   
+   TASK [install gcc] *************************************************************
+   ok: [zabbixstudio]
+   
+   TASK [install gcc-c++] *********************************************************
+   ok: [zabbixstudio]
+   
+   TASK [install pcre-devel] ******************************************************
+   ok: [zabbixstudio]
+   
+   TASK [openssl-devel] ***********************************************************
+   ok: [zabbixstudio]
+   
+   TASK [expat-devel] *************************************************************
+   changed: [zabbixstudio]
+   
+   TASK [perl] ********************************************************************
+   ok: [zabbixstudio]
+   
+   TASK [transfer httpd-2.4.39 to target host] ************************************
+   changed: [zabbixstudio]
+   
+   TASK [install httpd-2.4.39] ****************************************************
+   changed: [zabbixstudio]
+   
+   TASK [config systemd] **********************************************************
+   changed: [zabbixstudio]
+   
+   TASK [make httpd auto start on boot] *******************************************
+   changed: [zabbixstudio]
+   
+   TASK [start httpd] *************************************************************
+   changed: [zabbixstudio]
+   
+   PLAY RECAP *********************************************************************
+   zabbixstudio               : ok=12   changed=6    unreachable=0    failed=0 
+   ```
+   **4、** 在目标主机上检查 httpd 是否已经启动
+   ```bash
+   ps -ef | grep http
+   root      40441      1  0 11:25 ?        00:00:00 /usr/local/httpd/bin/httpd -DFOREGROUND         
+   daemon    40452  40441  0 11:25 ?        00:00:00 /usr/local/httpd/bin/httpd -DFOREGROUND         
+   daemon    40453  40441  0 11:25 ?        00:00:00 /usr/local/httpd/bin/httpd -DFOREGROUND         
+   daemon    40454  40441  0 11:25 ?        00:00:00 /usr/local/httpd/bin/httpd -DFOREGROUND         
+   root      40547   7155  0 11:28 pts/0    00:00:00 grep --color=auto http 
+   ```
+   当然也可以从浏览器上查看 httpd 是否正常
+
+   <img src="./imgs/check-httpd.jpg">
+
+   >这样的话 httpd 就算是安装成功了
+
+   ---
+
+
 
 
 
