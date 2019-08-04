@@ -68,4 +68,14 @@
     yum:
       name: libxml2-devel
       state: present
+
+  - name: install bzip2 
+    yum:
+      name: bzip2 
+      state: present
+
+  - name: install bzip2-devel
+    yum:
+      name: bzip2-devel
+      state: present
 ...

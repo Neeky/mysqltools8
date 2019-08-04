@@ -21,7 +21,7 @@ then
     echo "python-${PYTHON_VERSION} has been installed .";
 else
     # install dependence of python
-    yum -y install sshpass openssh openssh-clients gcc gcc-c++ libffi libyaml-devel libffi-devel zlib zlib-devel openssl openssl-devel libyaml sqlite-devel libxml2 libxslt-devel libxml2-devel
+    yum -y install openssh openssh-clients gcc gcc-c++ libffi libyaml-devel libffi-devel zlib zlib-devel openssl openssl-devel libyaml sqlite-devel libxml2 libxslt-devel libxml2-devel bzip2 bzip2-devel
     yum clean all
     if [ $? -eq 0 ]
     then
