@@ -5,6 +5,7 @@
       state: directory
       owner: "{{mysql_user}}"
       group: "{{mysql_group}}"
+      mode: 0775
 
   - name: "create backup script dir"
     file:

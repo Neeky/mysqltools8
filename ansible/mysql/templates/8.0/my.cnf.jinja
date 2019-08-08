@@ -20,7 +20,7 @@ admin_port                          ={{mysql_admin_port}}                       
 socket                              =/tmp/mysql-{{mysql_port}}.sock           # /tmp/mysql.sock
 skip_name_resolve                   =1                              #   0
 super_read_only                     =OFF                            # OFF
-sql_require_primary_key             =ON                             # OFF
+sql_require_primary_key             =OFF                            # OFF
 cte_max_recursion_depth             =1000                           # 1000
 log_timestamps                      =system                         # UTC
 lower_case_table_names              =1                              # 0
@@ -341,6 +341,9 @@ innodb_fsync_threshold              =0                              # 0 ~ 2**64-
 innodb_change_buffer_max_size       =25                             # 25
 innodb_change_buffering             =all                            # all | none | inserts | deletes | changes | purges
 
+## -- Clone Plugin
+plugin-load-add                     =mysql_clone.so
+clone                               =FORCE_PLUS_PERMANENT
 
 ####: others
 div_precision_increment             =4                              # 4

@@ -52,5 +52,10 @@ grant process            on *.* to {{mysql_extra_user}}@'localhost';
 grant super              on *.* to {{mysql_extra_user}}@'localhost';
 grant create,insert,select      on percona_schema.xtrabackup_history to {{mysql_extra_user}}@'localhost';
 
+{% if 'mysql-8.0' in mysql_version %}
+create user {{mysql_clone_user}}@'127.0.0.1' identified by '{{mysql_clone_pwd}}';
+grant backup_admin on *.* to {{mysql_clone_user}}@'127.0.0.1';
+grant clone_admin on *.* to {{mysql_clone_user}}@'127.0.0.1';
+{% endif%}
 
 set @@session.sql_log_bin=1;

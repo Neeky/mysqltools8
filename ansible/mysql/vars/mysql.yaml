@@ -19,6 +19,8 @@ mysql_dumper_user: 'dumper'
 mysql_dumper_pwd: 'dumper0352'
 mysql_extra_user: 'extrabackuper'
 mysql_extra_pwd: 'extra0352'
+mysql_clone_user: 'clone'
+mysql_clone_pwd: 'clone0352'
 mysql_binlog_format: "row"
 mysql_xport: "{{ mysql_port * 10 }}"
 mysql_mgrport: "{{ mysql_port * 10 + 1 }}"
